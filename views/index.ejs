@@ -1,0 +1,11 @@
+<%- include("./partials/header.ejs") -%>
+<!-- context -->
+<div>
+    <% texts.forEach(function(elements){ %>
+        <h1><%= elements.title %></h1>
+        <p><%= elements.content %></p>
+    <%})%>
+
+</div>
+
+<%- include("./partials/footer.ejs") -%>

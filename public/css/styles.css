@@ -1,0 +1,29 @@
+.body{
+    padding: 0;
+    margin: 0;
+}
+.box{
+    margin: 10px 2px;
+    padding: 2px;
+}
+.searchbar{
+    border: 1px solid rgb(177, 175, 175);
+    width: 60%;
+    padding: 0.2rem;
+    border-radius: 40px ;
+}
+.searchbar>i{
+    font-size: 10px;
+    color: #777;
+    padding: 0px 0px 7px 9px;
+    margin: 0;
+}
+.searchbar > input{
+    flex: 1;
+	height: 20px;
+	border: none;
+	outline: none;
+	font-size: 14px;
+	padding-left: 10px;
+}
+
