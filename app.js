@@ -3,19 +3,58 @@ const bodyParser = require('body-parser');
 const {restart} = require('nodemon');
 const ejs = require('ejs');
 const _ = require('lodash');
+const mongoose = require('mongoose');
 
 const app = express();
-const about = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Enim ut sem viverra aliquet eget sit. Amet dictum sit amet justo donec enim."
-const contact = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Proin libero nunc consequat interdum varius sit amet. Bibendum at varius vel pharetra vel."
+
+
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(express.static("public"));
 app.set('view engine','ejs');
 
-const posts =[];
+
+
+mongoose.connect("mongodb+srv://admin-sudan:onevoice123@cluster0.s4syznv.mongodb.net/blogsiteDB")
+
+const blogSchema = {
+    title:String,
+    description: String,
+    date:String,
+    author:String
+}
+
+const Blog =mongoose.model("Blog", blogSchema);
+
+const noblog = {
+    title : 'No Blog Uploaded',
+    description: 'No contents',
+    date:'null',
+    author:'null'
+}
+
+var options = {
+    month: 'long',
+    day: 'numeric',
+    weekday: 'long'
+}
+var date = new Date();
+var today = date.toLocaleDateString("en-US", options);
 
 
 app.get("/",function(req,res){
-    res.render('index.ejs',{texts:posts});
+    
+    Blog.find({},function(err,items){
+        if (items.length ===0){
+            Blog.insertMany([noblog],function(err){
+                if (!err){
+                    console.log("no error");
+                }
+            })
+            res.redirect("/");
+        }else{
+        res.render('index.ejs',{texts:items});
+        }
+    })
 })
 
 app.get("/about",function(req,res){
@@ -31,14 +70,21 @@ app.get("/compose",function(req,res){
 })
 
 
-app.post("/",function(req,res){
-    var data = {
-        "title":req.body.title,
-        "content":req.body.content
-    };
-    posts.push(data);
+app.post("/compose",function(req,res){
+    const data = new Blog({
+        title: req.body.title,
+        description:req.body.content,
+        date:today,
+        author:req.body.author
+    });
+    Blog.findOne({title:title},function(err,result){
+        if(!err){
+            result.push(data);
+            result.save();
+            res.redirect("/");
+        }
+    })
 
-    res.redirect("/");
 })
 
 app.get("/posts/:title",function(req,res){
@@ -49,11 +95,6 @@ app.get("/posts/:title",function(req,res){
         }
     })
   
-    // for(var i = 0 ; i< posts.length;i++){
-    //     if (posts[i].title === param){
-    //         console.log("Match found")
-    //     }
-    // }
 })
 
 

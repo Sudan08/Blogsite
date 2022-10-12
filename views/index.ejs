@@ -7,7 +7,7 @@
 
   <% texts.forEach(function(elements){ %>
   <h1><%= elements.title %></h1>
-  <p><%= elements.content.slice(0,100) + "..."%><a href="/posts/<%= elements.title %>">Readmore</a></p>
+  <p><%= elements.description.slice(0,100) + "..."%><a href="/posts/<%= elements.title %>">Readmore</a></p>
   <%})%>
 
 </div>
