@@ -37,6 +37,7 @@ app.post("/",function(req,res){
         "content":req.body.content
     };
     posts.push(data);
+
     res.redirect("/");
 })
 
