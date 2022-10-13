@@ -1,0 +1,36 @@
+<%- include("./partials/header.ejs") -%>
+
+<div class="d-flex justify-content-center flex-column align-items-center">
+    <div class="display-3 justify-content-center align-items-center">
+        <p>Dashboard</p>
+    </div>
+    <table class="table w-75">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">Title</th>
+            <th scope="col">Date</th>
+            <th scope="col">Author</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <% data.forEach(function(elements){ %>
+                <tr>
+                  <td><%= elements.title%></th>
+                  <td><%= elements.date%></td>
+                  <td><%= elements.author%></td>
+                  <form action="/dashboard" method="POST">
+                  <td><button class="btn btn-primary" onClick="this.form.submit()"><input type="hidden" name="update" value="<%=elements.title %>">Update</button></td>
+                  </form>
+                  <form action="/delete" method="POST">
+                  <td><button class="btn btn-danger" onClick="this.form.submit()"><input type="hidden" name="delete" value="<%=elements.title %>">Delete</button></td>
+                  </form>
+             <%})%>
+        </tbody>
+       
+      </table>
+
+</div>
+
+<%- include("./partials/footer.ejs") -%>

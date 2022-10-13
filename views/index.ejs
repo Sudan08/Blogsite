@@ -7,7 +7,9 @@
 
   <% texts.forEach(function(elements){ %>
   <h1><%= elements.title %></h1>
-  <p><%= elements.description.slice(0,100) + "..."%><a href="/posts/<%= elements.title %>">Readmore</a></p>
+  <% if (elements.description){ %>
+    <p><%= elements.description.slice(0,100) + "..."%><a href="/posts/<%= elements.title %>">Readmore</a></p>
+  <%}%>
   <%})%>
 
 </div>
@@ -58,7 +60,7 @@
       </div>
       <div class="texts w-50">
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, eos.</p>
-        <h1>muji</h1>
+        <h1>Life is good</h1>
       </div>
     </div>
   </div>
