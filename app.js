@@ -27,9 +27,6 @@ const Blog =mongoose.model("Blog", blogSchema);
 
 const noblog = {
     title : 'No Blog Uploaded',
-    description: 'No contents',
-    date:'null',
-    author:'null'
 }
 
 var options = {
@@ -52,7 +49,12 @@ app.get("/",function(req,res){
             })
             res.redirect("/");
         }else{
-        res.render('index.ejs',{texts:items});
+            Blog.findOneAndRemove({title:"No Blog Uploaded"},function(err){
+                if(!err){
+                    console.log("Removed default data")
+                }
+            })
+            res.render('index.ejs',{texts:items});
         }
     })
 })
@@ -71,30 +73,61 @@ app.get("/compose",function(req,res){
 
 
 app.post("/compose",function(req,res){
+    var title = req.body.title;
+    var description = req.body.content;
+    var author = req.body.author;  
     const data = new Blog({
-        title: req.body.title,
-        description:req.body.content,
+        title: title,
+        description: description,
         date:today,
-        author:req.body.author
+        author: author
     });
+
     Blog.findOne({title:title},function(err,result){
-        if(!err){
-            result.push(data);
-            result.save();
+        if(result){
+            console.log("Already exists")
+        }
+        else{
+            data.save();
             res.redirect("/");
         }
-    })
+    });
 
+})
+
+app.get("/dashboard",function(req,res){
+    Blog.find({},function(err,result){
+      if(!err){
+        res.render("dashboard.ejs",{data:result})
+      }  
+    })
+     
 })
 
 app.get("/posts/:title",function(req,res){
     var param = _.lowerCase(req.params.title);
-    posts.forEach(function(data){
-        if (_.lowerCase(data.title) === param){
-            res.render("posts.ejs",{heading:data.title , content:data.content})
-        }
+
+    Blog.find({},function(err,result){
+        result.forEach(element => {
+            if (_.lowerCase(element.title) === param ){
+                res.render("posts.ejs",{title:element.title,description:element.description,date:today,author:element.author})
+            }
+            else{
+                console.log("Not found")
+            }
+        });
+        
     })
   
+})
+
+app.post("/delete",function(req,res){
+    const title = req.body.delete;
+    Blog.deleteOne({title:title},function(err){
+        if(!err){
+            res.redirect("/dashboard");
+        }
+    })
 })
 
 
